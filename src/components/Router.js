@@ -6,7 +6,7 @@ import Profile from "../routes/Profile";
 import Navigation from "./Navigation";
 import { Redirect } from "react-router";
 
-const AppRouter = ({ isLoggedIn }) => {
+const AppRouter = ({ isLoggedIn, userObj }) => {
 
   return (
       <Router>
@@ -15,7 +15,7 @@ const AppRouter = ({ isLoggedIn }) => {
           {isLoggedIn ?
               <>
                 <Route exact path="/">
-                  <Home />
+                  <Home userObj={userObj} />
                 </Route>
                 <Route exact path="/profile">
                   <Profile />
