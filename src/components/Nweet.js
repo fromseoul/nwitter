@@ -8,8 +8,7 @@ const Nweet = ({ nweetObj, isOwner }) => {
   const [newNweet, setNewNweet] = useState(nweetObj.text);
 
   const onDeleteClick = async () => {
-    // eslint-disable-next-line no-restricted-globals
-    const ok = confirm("Are you sure you want to delete this nweet?");
+    const ok = window.confirm("Are you sure you want to delete this nweet?");
     const NweetTextRef = doc(dbService, "nweets", `${nweetObj.id}`);
 
     if (ok) await deleteDoc(NweetTextRef);
@@ -19,7 +18,6 @@ const Nweet = ({ nweetObj, isOwner }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(nweetObj, newNweet);
     await updateDoc(doc(dbService, "nweets", `${nweetObj.id}`),
       { text: newNweet });
     await toogleEditing();
