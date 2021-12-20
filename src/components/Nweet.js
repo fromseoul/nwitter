@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
-import { dbService } from "../fbase";
+import { dbService, storageService } from "../fbase";
+import { ref, deleteObject } from "firebase/storage";
 
 const Nweet = ({ nweetObj, isOwner }) => {
 
@@ -11,15 +12,17 @@ const Nweet = ({ nweetObj, isOwner }) => {
     const ok = window.confirm("Are you sure you want to delete this nweet?");
     const NweetTextRef = doc(dbService, "nweets", `${nweetObj.id}`);
 
-    if (ok) await deleteDoc(NweetTextRef);
+    if (ok) {
+      await deleteDoc(NweetTextRef);
+      await deleteObject(ref(storageService, nweetObj.attachmentUrl));
+    }
   }
 
   const toogleEditing = () => setEditing((prev) => !prev);
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await updateDoc(doc(dbService, "nweets", `${nweetObj.id}`),
-      { text: newNweet });
+    await updateDoc(doc(dbService, "nweets", `${nweetObj.id}`), { text: newNweet });
     await toogleEditing();
   }
 

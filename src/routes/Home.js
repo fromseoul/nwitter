@@ -18,7 +18,6 @@ const Home = ({ userObj }) => {
          ...doc.data(),
        }));
 
-      console.log(nweetArray);
       setNweets(nweetArray);
     });
 
