@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { dbService, storageService } from "../fbase";
-import { collection, addDoc, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, onSnapshot } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import Nweet from "../components/Nweet";
 import { v4 as uuidv4 } from 'uuid';
-import * as url from "url";
 
 const Home = ({ userObj }) => {
 
@@ -12,23 +11,14 @@ const Home = ({ userObj }) => {
   const [nweets, setNweets] = useState([]);
   const [attachment, setAttachment] = useState("");
 
-  const getNweets = async () => {
-    const dbNweets = await getDocs(collection(dbService, "nweets"));
-    dbNweets.forEach(document => {
-      const nweetObject = {
-        ...document.data(),
-        id: document.id,
-      }
-      setNweets(prev => [nweetObject, ...prev]);
-    });
-  }
-
   useEffect(() => {
     onSnapshot(collection(dbService, "nweets"), snapshot => {
        const nweetArray = snapshot.docs.map(doc => ({
          id: doc.id,
-         ...doc.data()
+         ...doc.data(),
        }));
+
+      console.log(nweetArray);
       setNweets(nweetArray);
     });
 
@@ -36,11 +26,13 @@ const Home = ({ userObj }) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    const fileRef = await ref(storageService, `${userObj.uid}/${uuidv4()}`);
-    const response = await uploadString(fileRef, attachment, "data_url");
-    const attachmentUrl = await getDownloadURL(response.ref);
-    console.log(attachmentUrl);
-    // console.log(response.reference.getDownloadURL());
+    let attachmentUrl = "";
+    if (attachment !== "") {
+      const fileRef = await ref(storageService, `${userObj.uid}/${uuidv4()}`);
+      const response = await uploadString(fileRef, attachment, "data_url");
+      attachmentUrl = await getDownloadURL(response.ref);
+
+    }
 
     const nweetObj = {
       text: nweet,
@@ -51,6 +43,7 @@ const Home = ({ userObj }) => {
 
     await addDoc(collection(dbService, "nweets"), nweetObj);
     await setNweet("");
+    await setAttachment("");
   };
 
   const onChange = (event) => {
@@ -80,7 +73,7 @@ const Home = ({ userObj }) => {
         <input type="submit" value="Nweet" />
         {attachment &&
         <div>
-          <img src={attachment} width="50px" height="50px" />
+          <img src={attachment} width="50px" height="50px" alt={attachment}/>
           <button onClick={onClearAttachmentClick}>Clear</button>
         </div>
         }
