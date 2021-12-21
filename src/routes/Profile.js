@@ -1,9 +1,31 @@
-import React from "react";
-import { authService } from "../fbase";
+import React, { useCallback, useEffect } from "react";
+import { authService, dbService } from "../fbase";
+import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
+import { useHistory } from "react-router";
 
-export default () => {
+const Profile = ({ userObj }) => {
 
-  const onLogOutClick = () => { authService.signOut(); }
+  const history = useHistory();
+
+  const onLogOutClick = async () => {
+    await authService.signOut();
+    history.push('/');
+  }
+
+  const getMyNweets = useCallback(async () => {
+    const nweets = await query(collection(dbService, "nweets"),
+      where("creatorId", "==", userObj.uid),
+      orderBy("createdAt")
+      );
+    const querySnapshot = await getDocs(nweets);
+    querySnapshot.forEach((doc) => {
+      console.log(doc.id, ">", doc.data());
+    })
+  }, [userObj.uid]);
+
+  useEffect(() => {
+    getMyNweets();
+   }, [getMyNweets]);
 
   return (
       <>
@@ -11,3 +33,5 @@ export default () => {
       </>
   )
 };
+
+export default Profile;
