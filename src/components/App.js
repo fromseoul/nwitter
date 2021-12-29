@@ -13,10 +13,19 @@ function App() {
       }
       setInit(true);
     });
-   }, []);
+   }, [])
+
+  const refreshUser = () => {
+    setUserObj({ displayName: userObj.displayName, uid: userObj.uid, updateProfile: (args) => userObj.updateProfile(args) });
+  }
 
   return <>
-    {init ? <AppRouter isLoggedIn={Boolean(userObj)} userObj={userObj} /> : "Initializing..."}
+    {init ? <AppRouter
+      isLoggedIn={Boolean(userObj)}
+      userObj={userObj}
+      refreshUser={refreshUser}
+      />
+      : "Initializing..."}
     <footer>&copy; {new Date().getFullYear()} Nwitter</footer>
   </>;
 }
