@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { dbService } from "../fbase";
+import { dbService, storageService } from "../fbase";
+import { v4 as uuidv4 } from "uuid";
 import Nweet from "../components/Nweet";
 
 function Home({ userObj }) {
@@ -15,14 +16,26 @@ function Home({ userObj }) {
     });
   }, []);
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
-    dbService.collection("nweets").add({
-      text: nweet,
-      createdAt: Date.now(),
-      creatorId: userObj.uid,
-    });
+
+    let attachmentUrl = "";
+
+    if (attachment !== "") {
+      const attachmentRef = storageService.ref().child(`${userObj.uid}/${uuidv4()}`);
+      const response = await attachmentRef.putString(attachment, "data_url");
+      attachmentUrl = await response.ref.getDownloadURL();
+    }
+      const nweetObj = {
+        text: nweet,
+        createdAt: Date.now(),
+        creatorId: userObj.uid,
+        attachmentUrl
+      }
+
+    await dbService.collection("nweets").add(nweetObj);
     setNweet("");
+    setAttachment("");
   };
 
   const onChange = (event) => {
@@ -52,7 +65,7 @@ function Home({ userObj }) {
         <input type="submit" value="Nweet"/>
         {attachment &&
         <div>
-          <img src={attachment} width={50} height={50} />
+          <img alt="" src={attachment} width={50} height={50} />
           <button onClick={onClearAttachment}>Clear</button>
         </div>
         }
