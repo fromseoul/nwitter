@@ -32,11 +32,15 @@ function Nweet({ nweetObj, isOwner }) {
     <div>
       {editing ?
         <>
+        {isOwner &&
+        <>
           <form onSubmit={onSubmit}>
-            <input onChange={onChange} type="text" placeholder="Edit your nweet" value={newNweet} required />
-            <input type="submit" value="Update Nweet" />
-          </form>
-          <button onClick={toggleEditing}>Cancel</button>
+              <input onChange={onChange} type="text" placeholder="Edit your nweet" value={newNweet} required />
+              <input type="submit" value="Update Nweet" />
+            </form>
+            <button onClick={toggleEditing}>Cancel</button>
+        </>
+        }
         </>
         :
         <>
