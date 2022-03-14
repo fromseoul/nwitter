@@ -15,6 +15,8 @@ function App() {
           uid: user.uid,
           updateProfile: (args) => user.updateProfile(args),
         });
+      } else {
+        setUserObj(null);
       }
       setInit(true);
     })
@@ -27,7 +29,7 @@ function App() {
 
   return <>
     {init ? <AppRouter refreshUser={refreshUser} isLoggedIn={Boolean(userObj)} userObj={userObj} /> : 'Initializing...'}
-    <footer>&copy; {new Date().getFullYear()} Nwitter</footer>
+    {/*<footer>&copy; {new Date().getFullYear()} Nwitter</footer>*/}
   </>
 }
 
