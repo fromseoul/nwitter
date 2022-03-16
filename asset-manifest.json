@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/nwitter/static/css/main.7548e81a.css",
-    "main.js": "/nwitter/static/js/main.bd3978cd.js",
-    "index.html": "/nwitter/index.html",
-    "main.7548e81a.css.map": "/nwitter/static/css/main.7548e81a.css.map",
-    "main.bd3978cd.js.map": "/nwitter/static/js/main.bd3978cd.js.map"
+    "main.css": "https://fromseoul.github.io/nwitter/static/css/main.7548e81a.css",
+    "main.js": "https://fromseoul.github.io/nwitter/static/js/main.fc6ff7ab.js",
+    "index.html": "https://fromseoul.github.io/nwitter/index.html",
+    "main.7548e81a.css.map": "https://fromseoul.github.io/nwitter/static/css/main.7548e81a.css.map",
+    "main.fc6ff7ab.js.map": "https://fromseoul.github.io/nwitter/static/js/main.fc6ff7ab.js.map"
   },
   "entrypoints": [
     "static/css/main.7548e81a.css",
-    "static/js/main.bd3978cd.js"
+    "static/js/main.fc6ff7ab.js"
   ]
 }
